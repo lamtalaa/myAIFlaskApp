@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask OpenAI</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 480px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #response {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h4>This is an emotionally intelligent chatbot created by Yassine L. using OpenAI!</h4>
+        <h1>Ask any Question!</h1>
+        
+        <form method="POST" action="/ask">
+            <input type="text" name="user_input" placeholder="Ask a question" required>
+            <button type="submit">Ask</button>
+        </form>
+
+        <div id="response">
+            <!-- Response from OpenAI will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // Optional: You can use JavaScript to dynamically update the response
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const userInput = document.querySelector('input[name="user_input"]').value;
+            
+            fetch('/ask', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'user_input': userInput
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const answer = data.answer || data.error;
+                document.getElementById('response').innerHTML = '<p>' + answer + '</p>';
+            })
+            .catch(error => {
+                document.getElementById('response').innerHTML = '<p>Error: ' + error.message + '</p>';
+            });
+        });
+    </script>
+</body>
+</html>
